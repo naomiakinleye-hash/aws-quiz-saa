@@ -7,156 +7,211 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
-:root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2236;--border:#1e2d47;--border2:#2a3f5f;--text:#e2e8f0;--muted:#64748b;--amber:#f59e0b;--amber2:#fbbf24;--blue:#3b82f6;--blue2:#60a5fa;--green:#10b981;--red:#ef4444;--orange:#f97316;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif}
+:root{
+  --pink:#C2185B;--pink2:#E91E63;--pink3:#F48FB1;--pink4:#FCE4EC;--pink5:#FFF0F5;
+  --bg:#FFFFFF;--surface:#FFF5F8;--surface2:#FFF0F5;--border:#F8C8DA;--border2:#F48FB1;
+  --text:#1A0A10;--muted:#9E6070;--dark:#2D0A18;
+  --green:#2E7D32;--green-bg:#E8F5E9;--red:#C62828;--red-bg:#FFEBEE;
+  --orange:#E65100;--orange-bg:#FFF3E0;--blue:#1565C0;--blue-bg:#E3F2FD;
+  --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+  --shadow:0 2px 12px rgba(194,24,91,.08);--shadow2:0 4px 24px rgba(194,24,91,.12);
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
-::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--surface)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--pink4)}
+::-webkit-scrollbar-thumb{background:var(--pink3);border-radius:10px}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:.875rem 2rem;background:white;border-bottom:2px solid var(--pink4);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.nav-logo{display:flex;align-items:center;gap:.625rem;cursor:pointer;text-decoration:none}
+.nav-logo-pill{background:var(--pink);color:white;font-family:var(--mono);font-size:.75rem;font-weight:500;padding:.3rem .7rem;border-radius:20px;letter-spacing:.05em}
+.nav-logo-text{font-size:1rem;font-weight:700;color:var(--dark);letter-spacing:-.02em}
+.nav-links{display:flex;gap:.375rem}
+.nav-btn{background:none;border:1.5px solid var(--border);color:var(--muted);cursor:pointer;padding:.375rem 1rem;border-radius:20px;font-family:var(--sans);font-size:.8125rem;font-weight:500;transition:all .15s}
+.nav-btn:hover{border-color:var(--pink);color:var(--pink);background:var(--pink5)}
+.nav-btn.active{border-color:var(--pink);color:white;background:var(--pink)}
+
+/* MAIN */
+.main{flex:1;padding:2rem;max-width:1060px;margin:0 auto;width:100%}
 .app{min-height:100vh;display:flex;flex-direction:column}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:.875rem 2rem;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.nav-logo{display:flex;align-items:center;gap:.75rem;font-family:var(--mono);font-size:1rem;font-weight:600;color:var(--amber);letter-spacing:.05em;cursor:pointer}
-.nav-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--amber),#ff8c00);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#000}
-.nav-links{display:flex;gap:.5rem}
-.nav-btn{background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;padding:.375rem .875rem;border-radius:6px;font-family:var(--sans);font-size:.8125rem;transition:all .15s}
-.nav-btn:hover,.nav-btn.active{border-color:var(--amber);color:var(--amber2);background:rgba(245,158,11,.06)}
-.main{flex:1;padding:2rem;max-width:1100px;margin:0 auto;width:100%}
-.home-hero{text-align:center;padding:3rem 0 2rem}
-.home-hero h1{font-size:2.5rem;font-weight:700;line-height:1.2;margin-bottom:.75rem}
-.home-hero h1 span{color:var(--amber)}
-.home-hero p{color:var(--muted);font-size:1rem;max-width:520px;margin:0 auto}
-.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.5rem}
-@media(max-width:640px){.setup-grid{grid-template-columns:1fr}}
-.setup-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem}
-.setup-card h3{font-size:.8rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--amber);margin-bottom:1rem}
-.field-label{font-size:.8125rem;color:var(--muted);margin-bottom:.375rem;display:block}
-.field-group{margin-bottom:1.125rem}
-select,input[type=number],input[type=range]{width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:.625rem .875rem;font-family:var(--sans);font-size:.875rem;appearance:none;cursor:pointer;transition:border-color .15s}
-select:focus,input[type=number]:focus{outline:none;border-color:var(--amber)}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border)}
-.toggle-row:last-child{border-bottom:none}
-.toggle-label{font-size:.875rem;color:var(--text)}
-.toggle-sub{font-size:.75rem;color:var(--muted)}
-.toggle{position:relative;width:40px;height:22px;flex-shrink:0}
-.toggle input{opacity:0;width:0;height:0}
-.toggle-slider{position:absolute;cursor:pointer;inset:0;background:var(--border2);border-radius:22px;transition:.2s}
-.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.2s}
-.toggle input:checked+.toggle-slider{background:var(--amber)}
-.toggle input:checked+.toggle-slider::before{transform:translateX(18px)}
-.start-btn{width:100%;padding:1rem;margin-top:1.5rem;background:linear-gradient(135deg,var(--amber),#ff8c00);color:#000;border:none;border-radius:10px;cursor:pointer;font-size:1rem;font-weight:700;font-family:var(--sans);letter-spacing:.02em;transition:opacity .15s,transform .1s}
-.start-btn:hover{opacity:.92;transform:translateY(-1px)}
-.start-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2rem}
+
+/* HOME */
+.home-hero{text-align:center;padding:3rem 0 2.5rem}
+.home-badge{display:inline-block;background:var(--pink4);color:var(--pink);font-size:.75rem;font-weight:600;padding:.35rem 1rem;border-radius:20px;margin-bottom:1.25rem;letter-spacing:.04em;font-family:var(--mono)}
+.home-hero h1{font-size:2.75rem;font-weight:700;line-height:1.15;margin-bottom:.875rem;color:var(--dark);letter-spacing:-.03em}
+.home-hero h1 em{color:var(--pink);font-style:normal}
+.home-hero p{color:var(--muted);font-size:1rem;max-width:480px;margin:0 auto;font-weight:400}
+.countdown-bar{background:var(--pink4);border:1.5px solid var(--border);border-radius:12px;padding:1rem 1.5rem;margin:1.5rem auto;max-width:500px;display:flex;align-items:center;justify-content:center;gap:1.5rem}
+.countdown-item{text-align:center}
+.countdown-num{font-size:2rem;font-weight:700;font-family:var(--mono);color:var(--pink);line-height:1}
+.countdown-lbl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:.125rem}
+
+/* MODE CARDS */
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2rem}
+@media(max-width:720px){.mode-grid{grid-template-columns:1fr}}
+.mode-card{border:2px solid var(--border);border-radius:16px;padding:1.75rem;cursor:pointer;transition:all .2s;background:white;text-align:left;position:relative;overflow:hidden}
+.mode-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--border);transition:background .2s}
+.mode-card:hover{border-color:var(--pink3);box-shadow:var(--shadow2);transform:translateY(-2px)}
+.mode-card:hover::before{background:var(--pink)}
+.mode-card.study::before{background:var(--pink)}
+.mode-card.study{border-color:var(--pink3)}
+.mode-icon{font-size:1.75rem;margin-bottom:1rem}
+.mode-title{font-size:1.125rem;font-weight:700;color:var(--dark);margin-bottom:.375rem;letter-spacing:-.02em}
+.mode-desc{font-size:.8375rem;color:var(--muted);line-height:1.5;margin-bottom:1.25rem}
+.mode-tags{display:flex;gap:.5rem;flex-wrap:wrap}
+.mode-tag{font-size:.72rem;font-family:var(--mono);padding:.2rem .625rem;border-radius:10px;background:var(--pink4);color:var(--pink);font-weight:500}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.875rem;margin-top:2rem}
 @media(max-width:640px){.stats-row{grid-template-columns:repeat(2,1fr)}}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.125rem 1.25rem}
-.stat-num{font-size:2rem;font-weight:700;font-family:var(--mono);color:var(--amber);line-height:1}
-.stat-lbl{font-size:.75rem;color:var(--muted);margin-top:.25rem}
-.quiz-layout{display:grid;grid-template-columns:1fr 260px;gap:1.5rem;align-items:start}
-@media(max-width:800px){.quiz-layout{grid-template-columns:1fr}.quiz-sidebar{order:-1}}
-.quiz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem}
-.quiz-progress-text{font-family:var(--mono);font-size:.875rem;color:var(--muted)}
-.quiz-progress-text span{color:var(--amber);font-weight:600}
-.timer{font-family:var(--mono);font-size:1.25rem;font-weight:600;padding:.375rem .875rem;border-radius:8px;background:var(--bg);border:1px solid var(--border2);min-width:90px;text-align:center;transition:color .3s,border-color .3s}
-.timer.warning{color:var(--orange);border-color:var(--orange)}
-.timer.danger{color:var(--red);border-color:var(--red);animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
-.progress-bar-wrap{height:4px;background:var(--border);border-radius:2px;margin-top:.75rem}
-.progress-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--amber),#ff8c00);transition:width .3s ease}
-.q-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.75rem;animation:fadeIn .2s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.q-meta{display:flex;gap:.5rem;align-items:center;margin-bottom:1.25rem}
-.q-num{font-family:var(--mono);font-size:.75rem;color:var(--muted);background:var(--bg);border:1px solid var(--border);padding:.2rem .6rem;border-radius:5px}
-.q-topic{font-size:.72rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--blue2);background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);padding:.2rem .625rem;border-radius:5px}
-.q-multiple-badge{font-size:.72rem;color:var(--orange);background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);padding:.2rem .625rem;border-radius:5px;font-family:var(--mono)}
-.q-flag-btn{margin-left:auto;background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;padding:.25rem .6rem;border-radius:6px;font-size:.75rem;transition:all .15s;display:flex;align-items:center;gap:.35rem}
-.q-flag-btn.flagged{border-color:var(--orange);color:var(--orange);background:rgba(249,115,22,.08)}
-.q-text{font-size:1rem;color:var(--text);line-height:1.7;margin-bottom:1.5rem}
-.options-list{display:flex;flex-direction:column;gap:.625rem}
-.option{display:flex;align-items:flex-start;gap:.875rem;padding:.875rem 1.125rem;border-radius:10px;border:1.5px solid var(--border);cursor:pointer;transition:all .15s;background:var(--bg)}
-.option:hover:not(.disabled){border-color:var(--border2);background:var(--surface2)}
-.option.selected{border-color:var(--amber);background:rgba(245,158,11,.06)}
-.option.correct{border-color:var(--green);background:rgba(16,185,129,.08)}
-.option.incorrect{border-color:var(--red);background:rgba(239,68,68,.08)}
-.option.missed{border-color:var(--blue);background:rgba(59,130,246,.06)}
-.option-letter{width:24px;height:24px;flex-shrink:0;border-radius:6px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.75rem;font-weight:600;color:var(--muted);transition:all .15s}
-.option.selected .option-letter{background:var(--amber);border-color:var(--amber);color:#000}
-.option.correct .option-letter{background:var(--green);border-color:var(--green);color:#fff}
-.option.incorrect .option-letter{background:var(--red);border-color:var(--red);color:#fff}
-.option.missed .option-letter{background:var(--blue);border-color:var(--blue);color:#fff}
-.option-text{font-size:.9rem;color:var(--text);line-height:1.55}
-.q-nav{display:flex;align-items:center;justify-content:space-between;margin-top:1.5rem;gap:.75rem}
-.q-nav-btn{padding:.625rem 1.25rem;border-radius:8px;font-size:.875rem;cursor:pointer;transition:all .15s;font-family:var(--sans);font-weight:500}
-.q-nav-btn.prev{background:none;border:1px solid var(--border2);color:var(--muted)}
-.q-nav-btn.prev:hover{border-color:var(--text);color:var(--text)}
-.q-nav-btn.next{background:var(--amber);border:1px solid var(--amber);color:#000;font-weight:700}
-.q-nav-btn.next:hover{opacity:.88}
-.q-nav-btn.submit{background:var(--green);border:1px solid var(--green);color:#fff;font-weight:700}
-.q-nav-btn:disabled{opacity:.35;cursor:not-allowed}
-.explanation-box{margin-top:1.25rem;padding:1rem 1.25rem;background:var(--bg);border:1px solid var(--border2);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;font-size:.875rem;color:var(--muted);line-height:1.6;animation:fadeIn .3s ease}
-.explanation-box strong{color:var(--blue2)}
-.quiz-sidebar{display:flex;flex-direction:column;gap:1rem}
-.sidebar-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.125rem}
-.sidebar-title{font-size:.72rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--amber);margin-bottom:.875rem}
-.q-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
-.q-dot{aspect-ratio:1;border-radius:5px;cursor:pointer;font-size:.65rem;font-family:var(--mono);font-weight:600;display:flex;align-items:center;justify-content:center;background:var(--bg);border:1px solid var(--border2);color:var(--muted);transition:all .12s}
-.q-dot:hover{border-color:var(--amber)}
-.q-dot.answered{background:rgba(245,158,11,.15);border-color:var(--amber);color:var(--amber2)}
-.q-dot.flagged{background:rgba(249,115,22,.15);border-color:var(--orange);color:var(--orange)}
-.q-dot.current{background:var(--amber);border-color:var(--amber);color:#000}
-.q-dot.correct-r{background:rgba(16,185,129,.2);border-color:var(--green);color:var(--green)}
-.q-dot.incorrect-r{background:rgba(239,68,68,.15);border-color:var(--red);color:var(--red)}
-.results-hero{text-align:center;padding:2.5rem 1rem 2rem;background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:2rem}
-.results-score{font-size:5rem;font-weight:700;font-family:var(--mono);line-height:1;margin-bottom:.25rem}
-.results-score.pass{color:var(--green)}.results-score.fail{color:var(--red)}
-.results-verdict{font-size:1.25rem;font-weight:600;margin-bottom:.5rem}
-.results-sub{color:var(--muted);font-size:.9rem}
-.results-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
-@media(max-width:640px){.results-grid{grid-template-columns:repeat(2,1fr)}}
-.r-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center}
-.r-stat-num{font-size:1.75rem;font-weight:700;font-family:var(--mono)}
-.r-stat-lbl{font-size:.75rem;color:var(--muted);margin-top:.2rem}
-.topic-breakdown{margin-bottom:2rem}
-.topic-row{display:flex;align-items:center;gap:.875rem;margin-bottom:.625rem}
-.topic-name{font-size:.8125rem;font-family:var(--mono);min-width:120px;color:var(--muted)}
-.topic-bar-wrap{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.stat-card{background:white;border:1.5px solid var(--border);border-radius:12px;padding:1.125rem 1.25rem}
+.stat-num{font-size:1.875rem;font-weight:700;font-family:var(--mono);color:var(--pink);line-height:1}
+.stat-lbl{font-size:.72rem;color:var(--muted);margin-top:.25rem;text-transform:uppercase;letter-spacing:.04em}
+
+/* PROGRESS GRID */
+.progress-section{margin-top:2.5rem}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.section-title{font-size:1rem;font-weight:700;color:var(--dark);letter-spacing:-.01em}
+.section-sub{font-size:.8rem;color:var(--muted)}
+.group-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:.5rem}
+.group-pill{border-radius:10px;padding:.5rem .25rem;text-align:center;cursor:pointer;border:1.5px solid var(--border);background:white;transition:all .15s;font-family:var(--mono)}
+.group-pill:hover{border-color:var(--pink);background:var(--pink5)}
+.group-pill.done-pass{background:var(--green-bg);border-color:#A5D6A7;color:var(--green)}
+.group-pill.done-fail{background:var(--red-bg);border-color:#EF9A9A;color:var(--red)}
+.group-pill.current-g{background:var(--pink4);border-color:var(--pink);color:var(--pink)}
+.group-pill-num{font-size:.7rem;font-weight:500;color:inherit}
+.group-pill-score{font-size:.8rem;font-weight:700;color:inherit}
+
+/* SETUP MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,10,16,.4);display:flex;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(4px)}
+.modal{background:white;border-radius:20px;padding:2rem;max-width:460px;width:90%;box-shadow:0 20px 60px rgba(194,24,91,.15)}
+.modal h2{font-size:1.25rem;font-weight:700;color:var(--dark);margin-bottom:.375rem;letter-spacing:-.02em}
+.modal-sub{font-size:.875rem;color:var(--muted);margin-bottom:1.5rem}
+.field-group{margin-bottom:1.125rem}
+.field-label{font-size:.8125rem;font-weight:600;color:var(--dark);margin-bottom:.375rem;display:block}
+select{width:100%;background:var(--pink5);border:1.5px solid var(--border);color:var(--text);border-radius:10px;padding:.625rem .875rem;font-family:var(--sans);font-size:.875rem;cursor:pointer;transition:border-color .15s;appearance:none}
+select:focus{outline:none;border-color:var(--pink)}
+.modal-btns{display:flex;gap:.75rem;margin-top:1.5rem}
+.btn-primary{flex:1;padding:.75rem;background:var(--pink);color:white;border:none;border-radius:10px;cursor:pointer;font-size:.9375rem;font-weight:600;font-family:var(--sans);transition:opacity .15s}
+.btn-primary:hover{opacity:.88}
+.btn-secondary{padding:.75rem 1.25rem;background:none;border:1.5px solid var(--border);color:var(--muted);border-radius:10px;cursor:pointer;font-size:.9375rem;font-weight:500;font-family:var(--sans);transition:all .15s}
+.btn-secondary:hover{border-color:var(--pink);color:var(--pink)}
+
+/* QUIZ */
+.quiz-wrap{max-width:800px;margin:0 auto}
+.quiz-topbar{display:flex;align-items:center;justify-content:space-between;background:white;border:1.5px solid var(--border);border-radius:14px;padding:.875rem 1.25rem;margin-bottom:1.25rem;box-shadow:var(--shadow)}
+.quiz-meta{font-size:.8125rem;color:var(--muted);font-family:var(--mono)}
+.quiz-meta strong{color:var(--pink)}
+.quiz-progress-outer{height:6px;background:var(--pink4);border-radius:3px;margin-top:.5rem;width:220px}
+.quiz-progress-inner{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--pink),var(--pink2));transition:width .3s ease}
+.timer-pill{font-family:var(--mono);font-size:1.1rem;font-weight:500;padding:.375rem 1rem;border-radius:20px;background:var(--pink4);color:var(--pink);border:1.5px solid var(--border);min-width:80px;text-align:center;transition:all .3s}
+.timer-pill.warning{background:var(--orange-bg);color:var(--orange);border-color:#FFCC80}
+.timer-pill.danger{background:var(--red-bg);color:var(--red);border-color:#EF9A9A;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+.q-card{background:white;border:1.5px solid var(--border);border-radius:16px;padding:1.75rem;box-shadow:var(--shadow);animation:slideUp .2s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.q-header{display:flex;align-items:center;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.q-badge{font-size:.7rem;font-family:var(--mono);padding:.2rem .625rem;border-radius:10px;font-weight:500}
+.q-badge.num{background:var(--pink4);color:var(--pink)}
+.q-badge.topic{background:var(--blue-bg);color:var(--blue)}
+.q-badge.multi{background:var(--orange-bg);color:var(--orange)}
+.q-flag{margin-left:auto;background:none;border:1.5px solid var(--border);color:var(--muted);cursor:pointer;padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:500;transition:all .15s}
+.q-flag:hover{border-color:var(--orange);color:var(--orange)}
+.q-flag.flagged{border-color:var(--orange);color:var(--orange);background:var(--orange-bg)}
+.q-text{font-size:.9875rem;color:var(--text);line-height:1.75;margin-bottom:1.5rem;font-weight:400}
+.options{display:flex;flex-direction:column;gap:.625rem}
+.option{display:flex;align-items:flex-start;gap:.875rem;padding:.875rem 1.125rem;border-radius:12px;border:1.5px solid var(--border);cursor:pointer;transition:all .15s;background:var(--pink5)}
+.option:hover:not(.disabled){border-color:var(--pink3);background:var(--pink4)}
+.option.selected{border-color:var(--pink);background:var(--pink4)}
+.option.correct{border-color:var(--green);background:var(--green-bg)}
+.option.incorrect{border-color:var(--red);background:var(--red-bg)}
+.option.missed{border-color:var(--blue);background:var(--blue-bg)}
+.option.disabled{cursor:default}
+.opt-letter{width:26px;height:26px;flex-shrink:0;border-radius:8px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.75rem;font-weight:600;color:var(--muted);transition:all .15s;background:white}
+.option.selected .opt-letter{background:var(--pink);border-color:var(--pink);color:white}
+.option.correct .opt-letter{background:var(--green);border-color:var(--green);color:white}
+.option.incorrect .opt-letter{background:var(--red);border-color:var(--red);color:white}
+.option.missed .opt-letter{background:var(--blue);border-color:var(--blue);color:white}
+.opt-text{font-size:.9rem;color:var(--text);line-height:1.55}
+.q-hint{font-size:.78rem;color:var(--muted);margin-top:.875rem;font-style:italic}
+.explanation{margin-top:1.25rem;padding:1rem 1.25rem;background:var(--blue-bg);border:1.5px solid #BBDEFB;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;font-size:.875rem;color:#1A237E;line-height:1.6;animation:slideUp .2s ease}
+.explanation strong{color:var(--blue)}
+
+.q-nav{display:flex;align-items:center;justify-content:space-between;margin-top:1.25rem;gap:.75rem}
+.nav-arrow{padding:.625rem 1.25rem;border-radius:10px;font-size:.875rem;cursor:pointer;font-family:var(--sans);font-weight:600;transition:all .15s}
+.nav-arrow.prev{background:none;border:1.5px solid var(--border);color:var(--muted)}
+.nav-arrow.prev:hover{border-color:var(--pink);color:var(--pink)}
+.nav-arrow.next{background:var(--pink);border:1.5px solid var(--pink);color:white}
+.nav-arrow.next:hover{opacity:.88}
+.nav-arrow.finish{background:var(--green);border:1.5px solid var(--green);color:white}
+.nav-arrow:disabled{opacity:.3;cursor:not-allowed}
+.submit-ghost{background:none;border:1.5px solid var(--border);color:var(--muted);padding:.625rem 1rem;border-radius:10px;cursor:pointer;font-size:.8125rem;font-weight:500;font-family:var(--sans);transition:all .15s}
+.submit-ghost:hover{border-color:var(--red);color:var(--red)}
+
+/* SESSION SUMMARY */
+.summary-card{background:white;border:2px solid var(--border);border-radius:20px;padding:2rem;text-align:center;max-width:560px;margin:2rem auto;box-shadow:var(--shadow2)}
+.summary-score{font-size:4.5rem;font-weight:700;font-family:var(--mono);line-height:1;margin-bottom:.25rem}
+.summary-score.pass{color:var(--green)}
+.summary-score.fail{color:var(--red)}
+.summary-verdict{font-size:1.125rem;font-weight:600;margin-bottom:.375rem;color:var(--dark)}
+.summary-sub{font-size:.875rem;color:var(--muted);margin-bottom:1.75rem}
+.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.75rem}
+.s-stat{background:var(--pink5);border:1px solid var(--border);border-radius:10px;padding:.875rem .5rem}
+.s-stat-num{font-size:1.5rem;font-weight:700;font-family:var(--mono);color:var(--pink)}
+.s-stat-lbl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:.125rem}
+.topic-breakdown{text-align:left;margin-bottom:1.5rem}
+.topic-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem}
+.topic-name{font-size:.8rem;font-family:var(--mono);min-width:110px;color:var(--muted)}
+.topic-bar-wrap{flex:1;height:7px;background:var(--pink4);border-radius:4px;overflow:hidden}
 .topic-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
-.topic-pct{font-size:.8125rem;font-family:var(--mono);min-width:40px;text-align:right}
-.review-list{display:flex;flex-direction:column;gap:1rem}
-.review-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-left:3px solid var(--border2)}
-.review-item.correct{border-left-color:var(--green)}.review-item.incorrect{border-left-color:var(--red)}
-.review-header{display:flex;align-items:center;gap:.75rem;margin-bottom:.875rem;cursor:pointer}
-.review-badge{padding:.2rem .625rem;border-radius:5px;font-size:.72rem;font-family:var(--mono);font-weight:600}
-.review-badge.correct{background:rgba(16,185,129,.12);color:var(--green)}
-.review-badge.incorrect{background:rgba(239,68,68,.1);color:var(--red)}
-.review-q-text{font-size:.9rem;color:var(--text);line-height:1.6;margin-bottom:1rem}
-.review-option{padding:.5rem .875rem;border-radius:7px;font-size:.85rem;margin-bottom:.375rem;display:flex;gap:.625rem;align-items:flex-start}
-.review-option.user-correct{background:rgba(16,185,129,.1);color:var(--green)}
-.review-option.user-wrong{background:rgba(239,68,68,.08);color:var(--red);text-decoration:line-through}
-.review-option.correct-ans{background:rgba(59,130,246,.08);color:var(--blue2)}
-.review-option.neutral{color:var(--muted)}
-.filter-tabs{display:flex;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap}
-.filter-tab{padding:.375rem .875rem;border-radius:7px;background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:.8125rem;transition:all .15s}
-.filter-tab.active{background:rgba(245,158,11,.1);border-color:var(--amber);color:var(--amber2)}
+.topic-pct{font-size:.8rem;font-family:var(--mono);min-width:36px;text-align:right;font-weight:600}
+.summary-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+
+/* RESULTS REVIEW */
+.review-list{display:flex;flex-direction:column;gap:.875rem;margin-top:1.25rem}
+.review-item{background:white;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;border-left:4px solid var(--border)}
+.review-item.correct{border-left-color:var(--green)}
+.review-item.incorrect{border-left-color:var(--red)}
+.review-head{display:flex;align-items:center;gap:.625rem;cursor:pointer;margin-bottom:.75rem;flex-wrap:wrap}
+.r-badge{padding:.2rem .625rem;border-radius:8px;font-size:.72rem;font-family:var(--mono);font-weight:600}
+.r-badge.correct{background:var(--green-bg);color:var(--green)}
+.r-badge.incorrect{background:var(--red-bg);color:var(--red)}
+.r-badge.flagged{background:var(--orange-bg);color:var(--orange)}
+.r-toggle{margin-left:auto;font-size:.8rem;color:var(--muted)}
+.review-q{font-size:.9rem;line-height:1.65;margin-bottom:.875rem;color:var(--text)}
+.review-opt{padding:.5rem .875rem;border-radius:8px;font-size:.85rem;margin-bottom:.375rem;display:flex;gap:.625rem}
+.review-opt.user-correct{background:var(--green-bg);color:var(--green)}
+.review-opt.user-wrong{background:var(--red-bg);color:var(--red);text-decoration:line-through}
+.review-opt.correct-ans{background:var(--blue-bg);color:var(--blue)}
+.review-opt.neutral{color:var(--muted)}
+.filter-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.filter-tab{padding:.375rem .875rem;border-radius:20px;background:white;border:1.5px solid var(--border);color:var(--muted);cursor:pointer;font-size:.8rem;font-weight:500;transition:all .15s}
+.filter-tab.active{background:var(--pink);border-color:var(--pink);color:white}
+
+/* HISTORY */
 .attempts-list{display:flex;flex-direction:column;gap:.75rem}
-.attempt-row{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:border-color .15s}
-.attempt-row:hover{border-color:var(--border2)}
-.attempt-score-circle{width:52px;height:52px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:.875rem;border:2px solid}
-.attempt-score-circle.pass{border-color:var(--green);color:var(--green);background:rgba(16,185,129,.08)}
-.attempt-score-circle.fail{border-color:var(--red);color:var(--red);background:rgba(239,68,68,.06)}
-.loading{display:flex;align-items:center;justify-content:center;min-height:40vh;flex-direction:column;gap:1rem;color:var(--muted)}
-.spinner{width:32px;height:32px;border:2px solid var(--border2);border-top-color:var(--amber);border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.btn{padding:.625rem 1.25rem;border-radius:8px;cursor:pointer;transition:all .15s;font-family:var(--sans);font-size:.875rem;font-weight:600}
-.btn-amber{background:var(--amber);border:none;color:#000}
-.btn-amber:hover{opacity:.88}
-.btn-ghost{background:none;border:1px solid var(--border2);color:var(--muted)}
-.btn-ghost:hover{border-color:var(--text);color:var(--text)}
-.section-title{font-size:1.125rem;font-weight:600;margin-bottom:1.25rem}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:1000}
-.dialog{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:2rem;max-width:420px;width:90%}
-.dialog h3{font-size:1.125rem;margin-bottom:.75rem}
-.dialog p{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem;line-height:1.6}
+.attempt-row{background:white;border:1.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:all .15s}
+.attempt-row:hover{border-color:var(--pink3);box-shadow:var(--shadow)}
+.attempt-circle{width:48px;height:48px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:.875rem;border:2px solid}
+.attempt-circle.pass{border-color:var(--green);color:var(--green);background:var(--green-bg)}
+.attempt-circle.fail{border-color:var(--red);color:var(--red);background:var(--red-bg)}
+.mode-pill{font-size:.7rem;font-family:var(--mono);padding:.15rem .5rem;border-radius:8px;background:var(--pink4);color:var(--pink);font-weight:500}
+
+/* CONFIRM DIALOG */
+.overlay{position:fixed;inset:0;background:rgba(26,10,16,.4);display:flex;align-items:center;justify-content:center;z-index:300;backdrop-filter:blur(4px)}
+.dialog{background:white;border-radius:20px;padding:2rem;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(194,24,91,.15)}
+.dialog h3{font-size:1.125rem;font-weight:700;color:var(--dark);margin-bottom:.75rem}
+.dialog p{color:var(--muted);font-size:.875rem;margin-bottom:1.5rem;line-height:1.6}
 .dialog-btns{display:flex;gap:.75rem;justify-content:flex-end}
+
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;min-height:30vh;flex-direction:column;gap:1rem;color:var(--muted)}
+.spinner{width:28px;height:28px;border:2px solid var(--pink4);border-top-color:var(--pink);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -166,53 +221,82 @@ const QUESTIONS = [{"id":1,"question":"A company collects data for temperature, 
 ;
 </script>
 <script type="text/babel">
-const { useState, useEffect, useRef } = React;
+const { useState, useEffect, useRef, useMemo } = React;
 
-const STORAGE_KEY = 'aws_quiz_attempts';
+const STORAGE_KEY = 'aws_saa_v2';
+const GROUP_SIZE = 20;
+const STUDY_TIME = 90;
+const EXAM_TIME = 90;
 
-function fmtTime(sec) {
-  if(sec<0)return'00:00';
-  return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');
+const TOPICS = [...new Set(QUESTIONS.map(q => q.topic))].sort();
+const TOTAL_GROUPS = Math.ceil(QUESTIONS.length / GROUP_SIZE);
+
+function loadData() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
 }
-function pctColor(p){return p>=72?'var(--green)':p>=50?'var(--orange)':'var(--red)'}
+function saveData(d) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch {}
+}
+function getData() {
+  const d = loadData();
+  if (!d.groupResults) d.groupResults = {};
+  if (!d.attempts) d.attempts = [];
+  return d;
+}
+function fmtTime(s) {
+  if (s < 0) return '00:00';
+  return String(Math.floor(s / 60)).padStart(2,'0') + ':' + String(s % 60).padStart(2,'0');
+}
+function pctColor(p) {
+  return p >= 72 ? 'var(--green)' : p >= 50 ? 'var(--orange)' : 'var(--red)';
+}
+function getQuestionsForGroup(groupIdx) {
+  const start = groupIdx * GROUP_SIZE;
+  return QUESTIONS.slice(start, start + GROUP_SIZE);
+}
+function getQuestionsForTopic(topic) {
+  return QUESTIONS.filter(q => q.topic === topic);
+}
 
-function getAttempts(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch{return[]}}
-function saveAttempt(a){try{const all=getAttempts();all.unshift(a);localStorage.setItem(STORAGE_KEY,JSON.stringify(all.slice(0,50)))}catch{}}
+// Days until May 14
+function daysUntilExam() {
+  const exam = new Date('2026-05-14');
+  const now = new Date();
+  const diff = Math.ceil((exam - now) / (1000 * 60 * 60 * 24));
+  return Math.max(0, diff);
+}
 
-const TOPICS = [...new Set(QUESTIONS.map(q=>q.topic))].sort();
-const STATS = {
-  total: QUESTIONS.length,
-  multiple: QUESTIONS.filter(q=>q.isMultiple).length,
-  topics: TOPICS.length
-};
+function App() {
+  const [screen, setScreen] = useState('home');
+  const [quizConfig, setQuizConfig] = useState(null);
+  const [results, setResults] = useState(null);
+  const [setupModal, setSetupModal] = useState(null); // 'study' | 'topic' | 'exam'
 
-function App(){
-  const [screen,setScreen]=useState('home');
-  const [quizState,setQuizState]=useState(null);
-  const [results,setResults]=useState(null);
-
-  function startQuiz(settings){
-    let pool=[...QUESTIONS];
-    if(settings.topic!=='all') pool=pool.filter(q=>q.topic===settings.topic);
-    if(settings.multipleOnly) pool=pool.filter(q=>q.isMultiple);
-    if(settings.shuffle) pool=pool.sort(()=>Math.random()-.5);
-    pool=pool.slice(0,Math.min(settings.count,pool.length));
-    setQuizState({questions:pool,settings,startTime:Date.now()});
+  function startQuiz(config) {
+    setQuizConfig(config);
+    setSetupModal(null);
     setScreen('quiz');
   }
-  function endQuiz(res){
-    saveAttempt(res);
+  function endQuiz(res) {
+    // Save result
+    const d = getData();
+    if (res.mode === 'study') {
+      d.groupResults[res.groupIdx] = { pct: res.percentage, passed: res.percentage >= 72, date: new Date().toISOString() };
+    }
+    d.attempts.unshift({ ...res, results: undefined, date: new Date().toISOString() });
+    d.attempts = d.attempts.slice(0, 100);
+    saveData(d);
     setResults(res);
     setScreen('results');
   }
-  function goHome(){setScreen('home');setQuizState(null);}
+  function goHome() { setScreen('home'); setQuizConfig(null); setResults(null); }
 
-  return(
+  return (
     <div className="app">
       <nav className="nav">
         <div className="nav-logo" onClick={goHome}>
-          <div className="nav-logo-icon">AWS</div>
-          SAA-C03 Simulator
+          <span className="nav-logo-pill">SAA-C03</span>
+          <span className="nav-logo-text">Exam Simulator</span>
         </div>
         <div className="nav-links">
           <button className={`nav-btn ${screen==='home'?'active':''}`} onClick={goHome}>Home</button>
@@ -220,349 +304,459 @@ function App(){
         </div>
       </nav>
       <main className="main">
-        {screen==='home'&&<HomeScreen onStart={startQuiz}/>}
-        {screen==='quiz'&&quizState&&<QuizScreen quizState={quizState} onEnd={endQuiz} onAbort={goHome}/>}
-        {screen==='results'&&results&&<ResultsScreen results={results} goHome={goHome}/>}
-        {screen==='history'&&<HistoryScreen onView={r=>{setResults(r);setScreen('results');}}/>}
+        {setupModal && <SetupModal mode={setupModal} onStart={startQuiz} onClose={()=>setSetupModal(null)}/>}
+        {screen==='home'   && <HomeScreen onMode={setSetupModal} getData={getData}/>}
+        {screen==='quiz'   && quizConfig && <QuizScreen config={quizConfig} onEnd={endQuiz} onAbort={goHome}/>}
+        {screen==='results'&& results    && <ResultsScreen results={results} goHome={goHome} onRetry={()=>startQuiz(quizConfig)}/>}
+        {screen==='history'&& <HistoryScreen onView={r=>{setResults(r);setScreen('results');}}/>}
       </main>
     </div>
   );
 }
 
-function HomeScreen({onStart}){
-  const [count,setCount]=useState(65);
-  const [topic,setTopic]=useState('all');
-  const [shuffle,setShuffle]=useState(true);
-  const [multiOnly,setMultiOnly]=useState(false);
+function HomeScreen({ onMode, getData }) {
+  const days = daysUntilExam();
+  const data = getData();
+  const completedGroups = Object.keys(data.groupResults || {}).length;
+  const totalQDone = completedGroups * GROUP_SIZE;
 
-  return(
+  return (
     <>
       <div className="home-hero">
-        <h1>AWS <span>Solutions Architect</span><br/>Exam Simulator</h1>
-        <p>Practice with {STATS.total.toLocaleString()} real exam questions. Timed exam mode, instant scoring, topic analysis.</p>
-      </div>
-      <div className="stats-row">
-        <div className="stat-card"><div className="stat-num">{STATS.total.toLocaleString()}</div><div className="stat-lbl">Total Questions</div></div>
-        <div className="stat-card"><div className="stat-num">{STATS.multiple}</div><div className="stat-lbl">Multi-Answer</div></div>
-        <div className="stat-card"><div className="stat-num">{STATS.topics}</div><div className="stat-lbl">Topics</div></div>
-        <div className="stat-card"><div className="stat-num">72%</div><div className="stat-lbl">Pass Mark</div></div>
-      </div>
-      <div className="setup-grid">
-        <div className="setup-card">
-          <h3>Quiz Settings</h3>
-          <div className="field-group">
-            <label className="field-label">Questions: {count}</label>
-            <input type="range" min={10} max={200} step={5} value={count} onChange={e=>setCount(+e.target.value)}/>
-          </div>
-          <div className="field-group">
-            <label className="field-label">Topic Filter</label>
-            <select value={topic} onChange={e=>setTopic(e.target.value)}>
-              <option value="all">All Topics ({STATS.total})</option>
-              {TOPICS.map(t=>{
-                const c=QUESTIONS.filter(q=>q.topic===t).length;
-                return <option key={t} value={t}>{t} ({c})</option>;
-              })}
-            </select>
-          </div>
-        </div>
-        <div className="setup-card">
-          <h3>Options</h3>
-          <div className="toggle-row">
-            <div><div className="toggle-label">Shuffle Questions</div><div className="toggle-sub">Randomize order each time</div></div>
-            <label className="toggle"><input type="checkbox" checked={shuffle} onChange={e=>setShuffle(e.target.checked)}/><span className="toggle-slider"></span></label>
-          </div>
-          <div className="toggle-row">
-            <div><div className="toggle-label">Multiple-Answer Only</div><div className="toggle-sub">Questions with 2+ correct answers</div></div>
-            <label className="toggle"><input type="checkbox" checked={multiOnly} onChange={e=>setMultiOnly(e.target.checked)}/><span className="toggle-slider"></span></label>
-          </div>
-          <div className="toggle-row">
-            <div><div className="toggle-label">Timed Exam</div><div className="toggle-sub">72 seconds per question</div></div>
-            <label className="toggle"><input type="checkbox" defaultChecked disabled/><span className="toggle-slider"></span></label>
-          </div>
+        <div className="home-badge">AWS Solutions Architect Associate</div>
+        <h1>Ready for <em>May 14?</em><br/>Let&apos;s get you there.</h1>
+        <p>1,019 exam questions. 90 seconds each. Groups of 20 — no excuses.</p>
+        <div className="countdown-bar">
+          <div className="countdown-item"><div className="countdown-num">{days}</div><div className="countdown-lbl">Days Left</div></div>
+          <div style={{width:1,height:40,background:'var(--border)'}}/>
+          <div className="countdown-item"><div className="countdown-num">{completedGroups}</div><div className="countdown-lbl">Groups Done</div></div>
+          <div style={{width:1,height:40,background:'var(--border)'}}/>
+          <div className="countdown-item"><div className="countdown-num">{totalQDone}</div><div className="countdown-lbl">Questions Done</div></div>
+          <div style={{width:1,height:40,background:'var(--border)'}}/>
+          <div className="countdown-item"><div className="countdown-num">{QUESTIONS.length - totalQDone}</div><div className="countdown-lbl">Remaining</div></div>
         </div>
       </div>
-      <button className="start-btn" onClick={()=>onStart({count,topic,shuffle,multipleOnly:multiOnly})}>
-        Start Exam ({count} Questions)
-      </button>
-    </>
-  );
-}
 
-function QuizScreen({quizState,onEnd,onAbort}){
-  const {questions,startTime}=quizState;
-  const total=questions.length;
-  const timeLimit=Math.max(total*72,3600);
-  const [current,setCurrent]=useState(0);
-  const [answers,setAnswers]=useState(()=>questions.map(()=>({selected:[],flagged:false})));
-  const [timeLeft,setTimeLeft]=useState(timeLimit);
-  const [showConfirm,setShowConfirm]=useState(false);
-  const timerRef=useRef(null);
-
-  useEffect(()=>{
-    timerRef.current=setInterval(()=>{
-      setTimeLeft(t=>{
-        if(t<=1){clearInterval(timerRef.current);submit(true);return 0;}
-        return t-1;
-      });
-    },1000);
-    return()=>clearInterval(timerRef.current);
-  },[]);
-
-  const q=questions[current];
-
-  function toggleOption(idx){
-    setAnswers(prev=>{
-      const copy=[...prev];
-      const ans={...copy[current],selected:[...copy[current].selected]};
-      if(q.isMultiple){
-        if(ans.selected.includes(idx))ans.selected=ans.selected.filter(x=>x!==idx);
-        else ans.selected=[...ans.selected,idx];
-      }else{
-        ans.selected=ans.selected[0]===idx?[]:[idx];
-      }
-      copy[current]=ans;
-      return copy;
-    });
-  }
-
-  function toggleFlag(){
-    setAnswers(prev=>{const copy=[...prev];copy[current]={...copy[current],flagged:!copy[current].flagged};return copy;});
-  }
-
-  function submit(auto=false){
-    clearInterval(timerRef.current);
-    const timeTaken=Math.floor((Date.now()-startTime)/1000);
-    let score=0;
-    const results=answers.map((ans,i)=>{
-      const correctArr=questions[i].correctAnswers;
-      const sel=ans.selected;
-      const isCorrect=correctArr.length===sel.length&&correctArr.every(c=>sel.includes(c));
-      if(isCorrect)score++;
-      return{
-        questionId:questions[i].id,
-        question:questions[i].question,
-        options:questions[i].options,
-        selected:sel,
-        correctAnswers:correctArr,
-        isCorrect,
-        flagged:ans.flagged,
-        topic:questions[i].topic,
-        explanation:questions[i].explanation,
-      };
-    });
-    const pct=Math.round((score/total)*100);
-    const topicBreakdown={};
-    results.forEach(r=>{
-      if(!topicBreakdown[r.topic])topicBreakdown[r.topic]={correct:0,total:0};
-      topicBreakdown[r.topic].total++;
-      if(r.isCorrect)topicBreakdown[r.topic].correct++;
-    });
-    onEnd({score,total,percentage:pct,passed:pct>=72,timeTaken,topicBreakdown,results,date:new Date().toISOString()});
-  }
-
-  const answered=answers.filter(a=>a.selected.length>0).length;
-  const flagged=answers.filter(a=>a.flagged).length;
-  const timerClass=timeLeft<300?'danger':timeLeft<600?'warning':'';
-
-  return(
-    <>
-      {showConfirm&&(
-        <div className="overlay">
-          <div className="dialog">
-            <h3>Submit Exam?</h3>
-            <p>You have answered {answered} of {total} questions.{flagged>0?` ${flagged} flagged.`:''}{total-answered>0?` ${total-answered} unanswered.`:''}</p>
-            <div className="dialog-btns">
-              <button className="btn btn-ghost" onClick={()=>setShowConfirm(false)}>Cancel</button>
-              <button className="btn btn-amber" onClick={()=>submit(false)}>Submit</button>
-            </div>
+      <div className="mode-grid">
+        <div className="mode-card study" onClick={()=>onMode('study')}>
+          <div className="mode-icon">📖</div>
+          <div className="mode-title">Study Mode</div>
+          <div className="mode-desc">Work through all 1,019 questions in order, 20 at a time. Track every group. Perfect for daily practice.</div>
+          <div className="mode-tags">
+            <span className="mode-tag">In Order</span>
+            <span className="mode-tag">20 Questions</span>
+            <span className="mode-tag">90s Timer</span>
           </div>
         </div>
-      )}
-      <div className="quiz-layout">
-        <div>
-          <div className="quiz-header">
-            <div>
-              <div className="quiz-progress-text">Question <span>{current+1}</span> of <span>{total}</span> <span style={{marginLeft:'1rem',color:'var(--muted)'}}>{answered} answered · {flagged} flagged</span></div>
-              <div className="progress-bar-wrap" style={{width:'260px',marginTop:'.5rem'}}><div className="progress-bar-fill" style={{width:`${((current+1)/total)*100}%`}}/></div>
-            </div>
-            <div className={`timer ${timerClass}`}>{fmtTime(timeLeft)}</div>
-          </div>
-          <div className="q-card" key={current}>
-            <div className="q-meta">
-              <span className="q-num">Q{q.id}</span>
-              <span className="q-topic">{q.topic}</span>
-              {q.isMultiple&&<span className="q-multiple-badge">Select {q.correctAnswers.length}</span>}
-              <button className={`q-flag-btn ${answers[current].flagged?'flagged':''}`} onClick={toggleFlag}>⚑ {answers[current].flagged?'Flagged':'Flag'}</button>
-            </div>
-            <p className="q-text">{q.question}</p>
-            <div className="options-list">
-              {q.options.map((opt,idx)=>(
-                <div key={idx} className={`option ${answers[current].selected.includes(idx)?'selected':''}`} onClick={()=>toggleOption(idx)}>
-                  <span className="option-letter">{String.fromCharCode(65+idx)}</span>
-                  <span className="option-text">{opt}</span>
-                </div>
-              ))}
-            </div>
-            {q.isMultiple&&<p style={{fontSize:'.78rem',color:'var(--muted)',marginTop:'.875rem'}}>Select all correct answers. All must be chosen to receive credit.</p>}
-          </div>
-          <div className="q-nav">
-            <button className="q-nav-btn prev" onClick={()=>setCurrent(c=>c-1)} disabled={current===0}>← Previous</button>
-            <button className="btn btn-ghost" onClick={()=>setShowConfirm(true)} style={{fontSize:'.8125rem'}}>Submit Exam</button>
-            {current<total-1?<button className="q-nav-btn next" onClick={()=>setCurrent(c=>c+1)}>Next →</button>:<button className="q-nav-btn submit" onClick={()=>setShowConfirm(true)}>Finish →</button>}
+        <div className="mode-card" onClick={()=>onMode('topic')}>
+          <div className="mode-icon">🎯</div>
+          <div className="mode-title">Topic Mode</div>
+          <div className="mode-desc">Drill a specific topic — S3, VPC, IAM, RDS. Questions in order, 20 at a time. Great for weak areas.</div>
+          <div className="mode-tags">
+            <span className="mode-tag">By Topic</span>
+            <span className="mode-tag">20 Questions</span>
+            <span className="mode-tag">90s Timer</span>
           </div>
         </div>
-        <div className="quiz-sidebar">
-          <div className="sidebar-card">
-            <div className="sidebar-title">Navigator</div>
-            <div className="q-grid">
-              {questions.map((_,i)=>{
-                let cls='';
-                if(i===current)cls='current';
-                else if(answers[i].flagged)cls='flagged';
-                else if(answers[i].selected.length>0)cls='answered';
-                return<div key={i} className={`q-dot ${cls}`} onClick={()=>setCurrent(i)}>{i+1}</div>;
-              })}
-            </div>
-          </div>
-          <div className="sidebar-card">
-            <div className="sidebar-title">Legend</div>
-            {[['current','Current'],['answered','Answered'],['flagged','Flagged'],['','Unanswered']].map(([cls,lbl])=>(
-              <div key={lbl} style={{display:'flex',alignItems:'center',gap:'.5rem',marginBottom:'.5rem'}}>
-                <div className={`q-dot ${cls}`} style={{width:20,height:20,fontSize:'.6rem'}}></div>
-                <span style={{fontSize:'.8rem',color:'var(--muted)'}}>{lbl}</span>
-              </div>
-            ))}
+        <div className="mode-card" onClick={()=>onMode('exam')}>
+          <div className="mode-icon">🏆</div>
+          <div className="mode-title">Exam Mode</div>
+          <div className="mode-desc">Full simulated exam. 65 shuffled questions, mixed topics, 90 seconds each. Exam conditions.</div>
+          <div className="mode-tags">
+            <span className="mode-tag">65 Questions</span>
+            <span className="mode-tag">Shuffled</span>
+            <span className="mode-tag">90s Timer</span>
           </div>
         </div>
       </div>
-    </>
-  );
-}
 
-function ResultsScreen({results,goHome}){
-  const [filter,setFilter]=useState('all');
-  const {score,total,percentage,passed,timeTaken,topicBreakdown,results:qs}=results;
-  const filtered=qs.filter(q=>filter==='all'?true:filter==='correct'?q.isCorrect:filter==='incorrect'?!q.isCorrect:q.flagged);
-  const topicEntries=Object.entries(topicBreakdown||{}).sort((a,b)=>(a[1].correct/a[1].total)-(b[1].correct/b[1].total));
-
-  return(
-    <>
-      <div className="results-hero">
-        <div className={`results-score ${passed?'pass':'fail'}`}>{percentage}%</div>
-        <div className="results-verdict">{passed?'PASSED':'FAILED'}</div>
-        <div className="results-sub">{score} correct of {total} · {fmtTime(timeTaken)} · {passed?'Meets 72% AWS requirement':`Need ${Math.ceil(total*.72)-score} more to pass`}</div>
-      </div>
-      <div className="results-grid">
-        <div className="r-stat"><div className="r-stat-num" style={{color:'var(--green)'}}>{score}</div><div className="r-stat-lbl">Correct</div></div>
-        <div className="r-stat"><div className="r-stat-num" style={{color:'var(--red)'}}>{total-score}</div><div className="r-stat-lbl">Incorrect</div></div>
-        <div className="r-stat"><div className="r-stat-num">{fmtTime(timeTaken)}</div><div className="r-stat-lbl">Time Taken</div></div>
-        <div className="r-stat"><div className="r-stat-num" style={{color:pctColor(percentage)}}>{percentage}%</div><div className="r-stat-lbl">Score</div></div>
-      </div>
-      {topicEntries.length>0&&(
-        <div className="topic-breakdown">
-          <h3 className="section-title">Topic Performance</h3>
-          {topicEntries.map(([topic,data])=>{
-            const pct=Math.round((data.correct/data.total)*100);
-            return(
-              <div key={topic} className="topic-row">
-                <span className="topic-name">{topic}</span>
-                <div className="topic-bar-wrap"><div className="topic-bar-fill" style={{width:`${pct}%`,background:pctColor(pct)}}/></div>
-                <span className="topic-pct" style={{color:pctColor(pct)}}>{pct}%</span>
-                <span style={{fontSize:'.75rem',color:'var(--muted)',minWidth:'60px',textAlign:'right'}}>{data.correct}/{data.total}</span>
+      <div className="progress-section">
+        <div className="section-header">
+          <div className="section-title">Study Progress — All {TOTAL_GROUPS} Groups</div>
+          <div className="section-sub">{completedGroups}/{TOTAL_GROUPS} completed</div>
+        </div>
+        <div className="group-grid">
+          {Array.from({length:TOTAL_GROUPS},(_,i)=>{
+            const res = data.groupResults?.[i];
+            const start = i*GROUP_SIZE+1;
+            const end = Math.min((i+1)*GROUP_SIZE, QUESTIONS.length);
+            let cls = '';
+            if (res) cls = res.passed ? 'done-pass' : 'done-fail';
+            return (
+              <div key={i} className={`group-pill ${cls}`} title={`Q${start}-Q${end}${res?' · '+res.pct+'%':''}`}>
+                <div className="group-pill-num">{start}-{end}</div>
+                {res && <div className="group-pill-score">{res.pct}%</div>}
               </div>
             );
           })}
         </div>
-      )}
-      <div className="filter-tabs">
-        {[['all',`All (${qs.length})`],['incorrect',`Incorrect (${qs.filter(q=>!q.isCorrect).length})`],['correct',`Correct (${qs.filter(q=>q.isCorrect).length})`],['flagged',`Flagged (${qs.filter(q=>q.flagged).length})`]].map(([k,l])=>(
-          <button key={k} className={`filter-tab ${filter===k?'active':''}`} onClick={()=>setFilter(k)}>{l}</button>
-        ))}
       </div>
-      <div className="review-list">{filtered.map((q,i)=><ReviewItem key={q.questionId} q={q}/>)}</div>
-      <div style={{marginTop:'2rem'}}><button className="btn btn-amber" onClick={goHome}>Take Another Quiz</button></div>
     </>
   );
 }
 
-function ReviewItem({q}){
-  const [open,setOpen]=useState(false);
-  return(
-    <div className={`review-item ${q.isCorrect?'correct':'incorrect'}`}>
-      <div className="review-header" onClick={()=>setOpen(!open)}>
-        <span className={`review-badge ${q.isCorrect?'correct':'incorrect'}`}>{q.isCorrect?'✓ Correct':'✗ Incorrect'}</span>
-        {q.flagged&&<span className="review-badge" style={{color:'var(--orange)',background:'rgba(249,115,22,.1)'}}>⚑ Flagged</span>}
-        <span style={{fontSize:'.75rem',color:'var(--muted)',fontFamily:'var(--mono)'}}>Q{q.questionId}</span>
-        <span style={{fontSize:'.75rem',color:'var(--blue2)',marginLeft:'.25rem'}}>{q.topic}</span>
-        <span style={{marginLeft:'auto',fontSize:'.8rem',color:'var(--muted)'}}>{open?'▲':'▼'}</span>
-      </div>
-      <p className="review-q-text">{q.question}</p>
-      {open&&(
-        <>
-          <div style={{display:'flex',flexDirection:'column',gap:'.25rem',marginBottom:'.875rem'}}>
-            {q.options.map((opt,idx)=>{
-              const isCorrect=q.correctAnswers.includes(idx);
-              const wasSelected=q.selected.includes(idx);
-              let cls='neutral';
-              if(wasSelected&&isCorrect)cls='user-correct';
-              else if(wasSelected&&!isCorrect)cls='user-wrong';
-              else if(!wasSelected&&isCorrect)cls='correct-ans';
-              return(
-                <div key={idx} className={`review-option ${cls}`}>
-                  <span style={{fontFamily:'var(--mono)',fontWeight:600,flexShrink:0}}>{String.fromCharCode(65+idx)}.</span>
-                  <span>{opt}</span>
-                  {isCorrect&&!wasSelected&&<span style={{marginLeft:'auto',fontSize:'.72rem'}}>← correct</span>}
-                </div>
-              );
-            })}
+function SetupModal({ mode, onStart, onClose }) {
+  const [group, setGroup] = useState(0);
+  const [topic, setTopic] = useState(TOPICS[0]);
+  const [topicGroup, setTopicGroup] = useState(0);
+  const [examCount, setExamCount] = useState(65);
+
+  const topicQs = getQuestionsForTopic(topic);
+  const topicGroups = Math.ceil(topicQs.length / GROUP_SIZE);
+
+  function handleStart() {
+    if (mode === 'study') {
+      onStart({ mode:'study', questions: getQuestionsForGroup(group), groupIdx: group, timePerQ: STUDY_TIME });
+    } else if (mode === 'topic') {
+      const start = topicGroup * GROUP_SIZE;
+      const qs = topicQs.slice(start, start + GROUP_SIZE);
+      onStart({ mode:'topic', questions: qs, topic, groupIdx: topicGroup, timePerQ: STUDY_TIME });
+    } else {
+      const shuffled = [...QUESTIONS].sort(()=>Math.random()-.5).slice(0, examCount);
+      onStart({ mode:'exam', questions: shuffled, timePerQ: EXAM_TIME });
+    }
+  }
+
+  const titles = { study:'Study Mode', topic:'Topic Mode', exam:'Exam Mode' };
+  const subs = {
+    study: 'Pick a group of 20 questions to work through.',
+    topic: 'Pick a topic and a group within that topic.',
+    exam: 'Simulated exam with shuffled questions.'
+  };
+
+  const nextGroup = (mode === 'study')
+    ? Array.from({length:TOTAL_GROUPS},(_,i)=>i).find(i => !getData().groupResults?.[i]) ?? 0
+    : null;
+
+  return (
+    <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="modal">
+        <h2>{titles[mode]}</h2>
+        <div className="modal-sub">{subs[mode]}</div>
+
+        {mode === 'study' && (
+          <div className="field-group">
+            <label className="field-label">Select Group</label>
+            <select value={group} onChange={e=>setGroup(+e.target.value)}>
+              {Array.from({length:TOTAL_GROUPS},(_,i)=>{
+                const start=i*GROUP_SIZE+1;
+                const end=Math.min((i+1)*GROUP_SIZE,QUESTIONS.length);
+                const res=getData().groupResults?.[i];
+                return <option key={i} value={i}>Group {i+1}: Q{start}–Q{end}{res?` (${res.pct}%)`:i===nextGroup?' ← Next':''}</option>;
+              })}
+            </select>
           </div>
-          <div className="explanation-box"><strong>Explanation: </strong>{q.explanation}</div>
-        </>
-      )}
+        )}
+
+        {mode === 'topic' && (
+          <>
+            <div className="field-group">
+              <label className="field-label">Topic</label>
+              <select value={topic} onChange={e=>{setTopic(e.target.value);setTopicGroup(0);}}>
+                {TOPICS.map(t=><option key={t} value={t}>{t} ({getQuestionsForTopic(t).length} questions)</option>)}
+              </select>
+            </div>
+            <div className="field-group">
+              <label className="field-label">Group</label>
+              <select value={topicGroup} onChange={e=>setTopicGroup(+e.target.value)}>
+                {Array.from({length:topicGroups},(_,i)=>{
+                  const start=i*GROUP_SIZE+1;
+                  const end=Math.min((i+1)*GROUP_SIZE,topicQs.length);
+                  return <option key={i} value={i}>Group {i+1}: Questions {start}–{end}</option>;
+                })}
+              </select>
+            </div>
+          </>
+        )}
+
+        {mode === 'exam' && (
+          <div className="field-group">
+            <label className="field-label">Number of Questions</label>
+            <select value={examCount} onChange={e=>setExamCount(+e.target.value)}>
+              <option value={20}>20 Questions (30 min)</option>
+              <option value={40}>40 Questions (60 min)</option>
+              <option value={65}>65 Questions — Full Exam (97 min)</option>
+              <option value={100}>100 Questions (150 min)</option>
+            </select>
+          </div>
+        )}
+
+        <div className="modal-btns">
+          <button className="btn-secondary" onClick={onClose}>Cancel</button>
+          <button className="btn-primary" onClick={handleStart}>Start →</button>
+        </div>
+      </div>
     </div>
   );
 }
 
-function HistoryScreen({onView}){
-  const attempts=getAttempts();
-  const allAnswers=attempts.flatMap(a=>a.results||[]);
-  const topicMap={};
-  allAnswers.forEach(r=>{
-    if(!topicMap[r.topic])topicMap[r.topic]={correct:0,total:0};
-    topicMap[r.topic].total++;
-    if(r.isCorrect)topicMap[r.topic].correct++;
-  });
-  const weakAreas=Object.entries(topicMap).map(([t,d])=>({topic:t,...d,pct:Math.round((d.correct/d.total)*100)})).sort((a,b)=>a.pct-b.pct).slice(0,8);
+function QuizScreen({ config, onEnd, onAbort }) {
+  const { questions, timePerQ, mode, groupIdx, topic } = config;
+  const total = questions.length;
+  const timeLimit = total * timePerQ;
+  const [current, setCurrent] = useState(0);
+  const [answers, setAnswers] = useState(() => questions.map(() => ({ selected: [], flagged: false })));
+  const [timeLeft, setTimeLeft] = useState(timeLimit);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const startTime = useRef(Date.now());
+  const timerRef = useRef(null);
 
-  return(
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setTimeLeft(t => {
+        if (t <= 1) { clearInterval(timerRef.current); submit(true); return 0; }
+        return t - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timerRef.current);
+  }, []);
+
+  const q = questions[current];
+
+  function toggleOption(idx) {
+    setAnswers(prev => {
+      const copy = [...prev];
+      const ans = { ...copy[current], selected: [...copy[current].selected] };
+      if (q.isMultiple) {
+        ans.selected = ans.selected.includes(idx) ? ans.selected.filter(x=>x!==idx) : [...ans.selected, idx];
+      } else {
+        ans.selected = ans.selected[0] === idx ? [] : [idx];
+      }
+      copy[current] = ans;
+      return copy;
+    });
+  }
+
+  function toggleFlag() {
+    setAnswers(prev => { const c=[...prev]; c[current]={...c[current],flagged:!c[current].flagged}; return c; });
+  }
+
+  function submit(auto = false) {
+    clearInterval(timerRef.current);
+    const timeTaken = Math.floor((Date.now() - startTime.current) / 1000);
+    let score = 0;
+    const results = answers.map((ans, i) => {
+      const ca = questions[i].correctAnswers;
+      const sel = ans.selected;
+      const isCorrect = ca.length === sel.length && ca.every(c => sel.includes(c));
+      if (isCorrect) score++;
+      return { questionId:questions[i].id, question:questions[i].question, options:questions[i].options, selected:sel, correctAnswers:ca, isCorrect, flagged:ans.flagged, topic:questions[i].topic, explanation:questions[i].explanation };
+    });
+    const pct = Math.round((score/total)*100);
+    const topicBreakdown = {};
+    results.forEach(r => {
+      if (!topicBreakdown[r.topic]) topicBreakdown[r.topic] = {correct:0,total:0};
+      topicBreakdown[r.topic].total++;
+      if (r.isCorrect) topicBreakdown[r.topic].correct++;
+    });
+    onEnd({ mode, groupIdx, topic, score, total, percentage:pct, passed:pct>=72, timeTaken, topicBreakdown, results, date:new Date().toISOString() });
+  }
+
+  const answered = answers.filter(a => a.selected.length > 0).length;
+  const flagged = answers.filter(a => a.flagged).length;
+  const qTimeLeft = timeLeft - (total - current - 1) * timePerQ;
+  const timerClass = qTimeLeft < 20 ? 'danger' : qTimeLeft < 45 ? 'warning' : '';
+  const modeLabel = mode==='study'?`Study · Group ${(groupIdx||0)+1}`:mode==='topic'?`Topic: ${topic}`:'Exam Mode';
+
+  return (
     <>
-      <h2 className="section-title">Exam History</h2>
-      {weakAreas.length>0&&(
+      {showConfirm && (
+        <div className="overlay">
+          <div className="dialog">
+            <h3>Submit Quiz?</h3>
+            <p>You have answered {answered} of {total} questions.{total-answered>0?` ${total-answered} still unanswered.`:' All answered.'}</p>
+            <div className="dialog-btns">
+              <button className="btn-secondary" onClick={()=>setShowConfirm(false)}>Keep Going</button>
+              <button className="btn-primary" onClick={()=>submit(false)}>Submit</button>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="quiz-wrap">
+        <div className="quiz-topbar">
+          <div>
+            <div className="quiz-meta"><strong>{current+1}</strong> / {total} · {modeLabel} · {answered} answered{flagged>0?` · ${flagged} flagged`:''}</div>
+            <div className="quiz-progress-outer" style={{marginTop:'.5rem'}}>
+              <div className="quiz-progress-inner" style={{width:`${((current+1)/total)*100}%`}}/>
+            </div>
+          </div>
+          <div className={`timer-pill ${timerClass}`}>{fmtTime(timeLeft)}</div>
+        </div>
+
+        <div className="q-card" key={current}>
+          <div className="q-header">
+            <span className="q-badge num">Q{q.id}</span>
+            <span className="q-badge topic">{q.topic}</span>
+            {q.isMultiple && <span className="q-badge multi">Select {q.correctAnswers.length}</span>}
+            <button className={`q-flag ${answers[current].flagged?'flagged':''}`} onClick={toggleFlag}>
+              {answers[current].flagged ? '⚑ Flagged' : '⚑ Flag'}
+            </button>
+          </div>
+          <p className="q-text">{q.question}</p>
+          <div className="options">
+            {q.options.map((opt, idx) => (
+              <div key={idx} className={`option ${answers[current].selected.includes(idx)?'selected':''}`} onClick={()=>toggleOption(idx)}>
+                <span className="opt-letter">{String.fromCharCode(65+idx)}</span>
+                <span className="opt-text">{opt}</span>
+              </div>
+            ))}
+          </div>
+          {q.isMultiple && <p className="q-hint">Select all correct answers — all must be chosen to receive credit.</p>}
+        </div>
+
+        <div className="q-nav">
+          <button className="nav-arrow prev" onClick={()=>setCurrent(c=>c-1)} disabled={current===0}>← Prev</button>
+          <button className="submit-ghost" onClick={()=>setShowConfirm(true)}>Submit Quiz</button>
+          {current < total-1
+            ? <button className="nav-arrow next" onClick={()=>setCurrent(c=>c+1)}>Next →</button>
+            : <button className="nav-arrow finish" onClick={()=>setShowConfirm(true)}>Finish ✓</button>}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ResultsScreen({ results, goHome, onRetry }) {
+  const [filter, setFilter] = useState('all');
+  const [open, setOpen] = useState({});
+  const { mode, score, total, percentage, passed, timeTaken, topicBreakdown, results:qs, groupIdx, topic } = results;
+
+  const filtered = qs.filter(q =>
+    filter==='all' ? true :
+    filter==='incorrect' ? !q.isCorrect :
+    filter==='correct' ? q.isCorrect :
+    q.flagged
+  );
+
+  const topicEntries = Object.entries(topicBreakdown||{}).sort((a,b)=>(a[1].correct/a[1].total)-(b[1].correct/b[1].total));
+  const modeLabel = mode==='study'?`Study Mode · Group ${(groupIdx||0)+1}`:mode==='topic'?`Topic: ${topic}`:'Exam Mode';
+
+  return (
+    <>
+      <div className="summary-card">
+        <div style={{fontSize:'.8rem',color:'var(--muted)',marginBottom:'.5rem',fontFamily:'var(--mono)'}}>{modeLabel}</div>
+        <div className={`summary-score ${passed?'pass':'fail'}`}>{percentage}%</div>
+        <div className="summary-verdict">{passed ? '✓ Passed' : '✗ Keep Practising'}</div>
+        <div className="summary-sub">{score}/{total} correct · {fmtTime(timeTaken)} · {passed?'Above 72% pass mark':`${Math.ceil(total*.72)-score} more needed to pass`}</div>
+        <div className="summary-stats">
+          <div className="s-stat"><div className="s-stat-num" style={{color:'var(--green)'}}>{score}</div><div className="s-stat-lbl">Correct</div></div>
+          <div className="s-stat"><div className="s-stat-num" style={{color:'var(--red)'}}>{total-score}</div><div className="s-stat-lbl">Wrong</div></div>
+          <div className="s-stat"><div className="s-stat-num">{qs.filter(q=>q.flagged).length}</div><div className="s-stat-lbl">Flagged</div></div>
+        </div>
+        {topicEntries.length > 0 && (
+          <div className="topic-breakdown">
+            {topicEntries.map(([t,d])=>{
+              const p=Math.round((d.correct/d.total)*100);
+              return(
+                <div key={t} className="topic-row">
+                  <span className="topic-name">{t}</span>
+                  <div className="topic-bar-wrap"><div className="topic-bar-fill" style={{width:`${p}%`,background:pctColor(p)}}/></div>
+                  <span className="topic-pct" style={{color:pctColor(p)}}>{p}%</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        <div className="summary-btns">
+          <button className="btn-secondary" onClick={goHome}>Home</button>
+          {onRetry && <button className="btn-primary" onClick={onRetry}>Retry Group</button>}
+        </div>
+      </div>
+
+      <div className="filter-tabs">
+        {[['all',`All (${qs.length})`],['incorrect',`Wrong (${qs.filter(q=>!q.isCorrect).length})`],['correct',`Correct (${qs.filter(q=>q.isCorrect).length})`],['flagged',`Flagged (${qs.filter(q=>q.flagged).length})`]].map(([k,l])=>(
+          <button key={k} className={`filter-tab ${filter===k?'active':''}`} onClick={()=>setFilter(k)}>{l}</button>
+        ))}
+      </div>
+
+      <div className="review-list">
+        {filtered.map(q => {
+          const isOpen = open[q.questionId];
+          return (
+            <div key={q.questionId} className={`review-item ${q.isCorrect?'correct':'incorrect'}`}>
+              <div className="review-head" onClick={()=>setOpen(o=>({...o,[q.questionId]:!o[q.questionId]}))}>
+                <span className={`r-badge ${q.isCorrect?'correct':'incorrect'}`}>{q.isCorrect?'✓ Correct':'✗ Wrong'}</span>
+                {q.flagged && <span className="r-badge flagged">⚑</span>}
+                <span style={{fontSize:'.75rem',color:'var(--muted)',fontFamily:'var(--mono)'}}>Q{q.questionId} · {q.topic}</span>
+                <span className="r-toggle">{isOpen?'▲':'▼'}</span>
+              </div>
+              <p className="review-q">{q.question}</p>
+              {isOpen && (
+                <>
+                  <div style={{marginBottom:'.875rem'}}>
+                    {q.options.map((opt,idx)=>{
+                      const isC=q.correctAnswers.includes(idx);
+                      const wasSel=q.selected.includes(idx);
+                      let cls='neutral';
+                      if(wasSel&&isC)cls='user-correct';
+                      else if(wasSel&&!isC)cls='user-wrong';
+                      else if(!wasSel&&isC)cls='correct-ans';
+                      return(
+                        <div key={idx} className={`review-opt ${cls}`}>
+                          <span style={{fontFamily:'var(--mono)',fontWeight:600,flexShrink:0}}>{String.fromCharCode(65+idx)}.</span>
+                          <span>{opt}</span>
+                          {isC&&!wasSel&&<span style={{marginLeft:'auto',fontSize:'.72rem',flexShrink:0}}>← correct</span>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="explanation"><strong>Explanation: </strong>{q.explanation}</div>
+                </>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <div style={{marginTop:'2rem',display:'flex',gap:'.75rem'}}>
+        <button className="btn-secondary" onClick={goHome}>← Back to Home</button>
+      </div>
+    </>
+  );
+}
+
+function HistoryScreen({ onView }) {
+  const d = getData();
+  const attempts = d.attempts || [];
+  const allResults = attempts.flatMap(a => a.results || []);
+  const topicMap = {};
+  allResults.forEach(r => {
+    if (!topicMap[r.topic]) topicMap[r.topic] = {correct:0,total:0};
+    topicMap[r.topic].total++;
+    if (r.isCorrect) topicMap[r.topic].correct++;
+  });
+  const weakAreas = Object.entries(topicMap).map(([t,d])=>({topic:t,...d,pct:Math.round((d.correct/d.total)*100)})).sort((a,b)=>a.pct-b.pct).slice(0,8);
+
+  return (
+    <>
+      <h2 className="section-title" style={{marginBottom:'1.5rem'}}>History</h2>
+      {weakAreas.length > 0 && (
         <div style={{marginBottom:'2rem'}}>
-          <h3 className="section-title" style={{fontSize:'1rem',color:'var(--red)'}}>Weak Areas</h3>
+          <div className="section-header"><div className="section-title" style={{color:'var(--red)'}}>Weak Areas</div></div>
           {weakAreas.map(a=>(
             <div key={a.topic} className="topic-row">
               <span className="topic-name">{a.topic}</span>
               <div className="topic-bar-wrap"><div className="topic-bar-fill" style={{width:`${a.pct}%`,background:pctColor(a.pct)}}/></div>
               <span className="topic-pct" style={{color:pctColor(a.pct)}}>{a.pct}%</span>
-              <span style={{fontSize:'.75rem',color:'var(--muted)',minWidth:'60px',textAlign:'right'}}>{a.correct}/{a.total}</span>
+              <span style={{fontSize:'.75rem',color:'var(--muted)',minWidth:'55px',textAlign:'right'}}>{a.correct}/{a.total}</span>
             </div>
           ))}
         </div>
       )}
-      {attempts.length===0?(
-        <div className="loading">No attempts yet. Take a quiz to see your history.</div>
-      ):(
+      {attempts.length === 0 ? (
+        <div className="loading">No attempts yet. Start studying!</div>
+      ) : (
         <div className="attempts-list">
           {attempts.map((a,i)=>(
-            <div key={i} className="attempt-row" onClick={()=>onView(a)}>
-              <div className={`attempt-score-circle ${a.passed?'pass':'fail'}`}>{a.percentage}%</div>
+            <div key={i} className="attempt-row">
+              <div className={`attempt-circle ${a.passed?'pass':'fail'}`}>{a.percentage}%</div>
               <div style={{flex:1}}>
-                <div style={{fontWeight:600,fontSize:'.9rem'}}>{a.score}/{a.total} correct</div>
-                <div style={{fontSize:'.78rem',color:'var(--muted)',marginTop:'.2rem'}}>{new Date(a.date).toLocaleString()} · {fmtTime(a.timeTaken)}</div>
+                <div style={{display:'flex',alignItems:'center',gap:'.5rem',marginBottom:'.2rem'}}>
+                  <span style={{fontWeight:600,fontSize:'.9rem'}}>{a.score}/{a.total} correct</span>
+                  <span className="mode-pill">{a.mode==='study'?`Group ${(a.groupIdx||0)+1}`:a.mode==='topic'?a.topic:'Exam'}</span>
+                </div>
+                <div style={{fontSize:'.78rem',color:'var(--muted)'}}>{new Date(a.date).toLocaleString()} · {fmtTime(a.timeTaken)}</div>
               </div>
-              <span style={{fontSize:'.8rem',color:a.passed?'var(--green)':'var(--red)',fontWeight:600}}>{a.passed?'PASS':'FAIL'}</span>
-              <span style={{color:'var(--muted)',fontSize:'.875rem'}}>View →</span>
+              <span style={{fontSize:'.8rem',color:a.passed?'var(--green)':'var(--red)',fontWeight:700}}>{a.passed?'PASS':'FAIL'}</span>
             </div>
           ))}
         </div>
@@ -571,7 +765,7 @@ function HistoryScreen({onView}){
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
 </body>
 </html>
